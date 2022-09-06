@@ -11,7 +11,7 @@ function makeGrid(x,y) {
     for (let yi = 0; yi < x; yi++) {
         result += `<tr>`;
         for (let xi = 0; xi < x; xi++) {
-            result += `<td id="x${xi}y${yi}" onclick="input(${xi},${yi})"></td>`;
+            result += `<td id="x${xi}y${yi}" onmouseover="hoverObstycle(${xi}, ${yi})" onclick="input(${xi},${yi})"></td>`;
         }
         result += `</tr>`;
     }
@@ -68,7 +68,7 @@ function AStarV2() {
                 lowTotalNode = node;
             }
         }
-
+        if (lowTotalNode == -1) return null;
         for (let i = 0; i < directions.length; i++) {
             let newCordinates = [nodes[lowTotalNode].myPosition[0]+directions[i][0],nodes[lowTotalNode].myPosition[1]+directions[i][1]];
             if (newCordinates[0] == destynation[0] && newCordinates[1] == destynation[1]) {
@@ -254,10 +254,26 @@ function drawPath(path) {
     for (let node in path) {
         node = path[node];
         console.log(node.totalCost);
-        document.querySelector(`#x${node.myPosition[0]}y${node.myPosition[1]}`).innerHTML = `${node.distanceDest} ${node.distanceStart}<br>${Math.floor(node.totalCost)}`;
+        //document.querySelector(`#x${node.myPosition[0]}y${node.myPosition[1]}`).innerHTML = `${node.distanceDest} ${node.distanceStart}<br>${Math.floor(node.totalCost)}`;
+        document.querySelector(`#x${node.myPosition[0]}y${node.myPosition[1]}`).style.backgroundColor = "blue";
 
     }
 }
 makeGrid(20, 20);
 drawDestStart();
 //showPath();
+
+var hover = false;
+
+function hoverObstycle(x,y) {
+    if (!hover) return;
+    setObstycle(x,y);
+}
+
+window.addEventListener("mousedown", (e) => {
+    hover = true;
+});
+
+document.addEventListener("mouseup", (e) => {
+    hover = false;
+});
